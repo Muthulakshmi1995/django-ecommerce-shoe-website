@@ -1,0 +1,16 @@
+{% extends 'store/base.html' %}{% load static %}
+{% block content %}
+<section class="hero">
+  <div class="hero-slide active" style="--hero:url('{% static 'store/products/asset_10.jpg' %}')"><div class="hero-copy"><p>Womens red color<br>high heel for party<br>for your first order get a free gift</p><a class="btn btn-light" href="{% url 'store:shop' %}">Shop Now</a></div></div>
+  <div class="hero-slide" style="--hero:url('{% static 'store/products/asset_19.jpg' %}')"><div class="hero-copy"><p>Find your everyday<br>favourite pair</p><a class="btn btn-light" href="{% url 'store:shop' %}">Shop Now</a></div></div>
+  <div class="hero-slide" style="--hero:url('{% static 'store/products/asset_01.jpg' %}')"><div class="hero-copy"><p>Step into your style<br>New season favourites</p><a class="btn btn-light" href="{% url 'store:shop' %}">Shop Now</a></div></div>
+  <div class="hero-dots"><button class="dot active" aria-label="Slide 1"></button><button class="dot" aria-label="Slide 2"></button><button class="dot" aria-label="Slide 3"></button></div>
+</section>
+<section class="overview"><h2>Overview</h2><p>Explore our curated selection of high-quality shoes for every occasion. From durable athletic shoes designed for peak performance to stylish casual sneakers and elegant dress shoes, we offer a diverse range of footwear to suit your needs. Our user-friendly interface makes it easy to browse our collection and find the perfect pair, while detailed product descriptions and high-quality images ensure you make an informed decision. Join our community of style and discover your next favorite shoe!</p></section>
+<section class="section-block"><h2>What are you looking for?</h2><div class="category-tiles">
+<a class="category-tile" href="{% url 'store:category' 'men' %}"><img src="{% static 'store/products/asset_09.png' %}" alt="Men's shoes"><h3>Mens</h3></a>
+<a class="category-tile" href="{% url 'store:category' 'women' %}"><img src="{% static 'store/products/asset_02.png' %}" alt="Women's shoes"><h3>Womens</h3></a>
+<a class="category-tile" href="{% url 'store:category' 'kids' %}"><img src="{% static 'store/products/asset_21.png' %}" alt="Kids shoes"><h3>Kids</h3></a></div></section>
+<section class="section-block"><div class="section-heading"><h2>New & Trending</h2><a class="btn" href="{% url 'store:shop' %}">View all</a></div><div class="product-grid">{% for product in trending|slice:":4" %}{% include 'store/_product_card.html' %}{% empty %}<p>Products will appear here after setup.</p>{% endfor %}</div></section>
+<section class="gift-banner"><span>🎁</span> Get your first order with free gift <span>🎁</span> & 50% offer ✨</section>
+{% endblock %}

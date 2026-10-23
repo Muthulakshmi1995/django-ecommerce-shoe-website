@@ -1,0 +1,86 @@
+
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title|default:'Shop shoes' }} | StepUp.in{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">FIND YOUR NEXT FAVOURITE</p>
+        <h1>{{ page_title|default:'Shop all shoes' }}</h1>
+        <p>Comfort, colour and confidence in every step.</p>
+    </div>
+
+    <a class="btn" href="{% url 'store:cart' %}">
+        View cart ({{ cart_count }})
+    </a>
+</div>
+
+<div class="shop-toolbar">
+    <details class="filters">
+        <summary>Filters →</summary>
+
+        <div class="filter-options">
+            <a href="{% url 'store:shop' %}">All shoes</a>
+
+            {% for c in categories %}
+                <a href="{% url 'store:category' c.slug %}">
+                    {{ c.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </details>
+
+    <form method="get" class="sort-form">
+
+        {% if selected_category %}
+            <input type="hidden" name="category" value="{{ selected_category }}">
+        {% endif %}
+
+        <input type="hidden" name="q" value="{{ search }}">
+
+        <label for="sort">Sort by</label>
+
+        <select name="sort" id="sort" onchange="this.form.submit()">
+            <option value="">Recommended</option>
+
+            <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>
+                Price: low to high
+            </option>
+
+            <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>
+                Price: high to low
+            </option>
+
+            <option value="rating" {% if sort == 'rating' %}selected{% endif %}>
+                Top rated
+            </option>
+        </select>
+
+    </form>
+</div>
+
+{% if search %}
+    <p>Search results for <strong>{{ search }}</strong></p>
+{% endif %}
+
+<div class="product-grid shop-grid">
+
+    {% for product in products %}
+        {% include 'store/_product_card.html' %}
+
+    {% empty %}
+        <div class="empty-state">
+            <h2>No shoes found</h2>
+            <p>Try another category or search term.</p>
+            <a class="btn" href="{% url 'store:shop' %}">
+                View all shoes
+            </a>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

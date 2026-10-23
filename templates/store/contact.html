@@ -1,0 +1,6 @@
+{% extends 'store/base.html' %}{% load static %}
+{% block title %}Contact Us | StepUp.in{% endblock %}
+{% block content %}
+<section class="contact-hero"><div class="contact-copy"><p class="eyebrow">WE'RE HERE TO HELP</p><h1>Contact Us</h1><h2>For Online Orders</h2><p>Inquiry / Complaint</p><p><strong>+91 99763 57250</strong></p><h3>Any other queries</h3><p>Customer care: 10 AM–7:00 PM</p><p>Email: <a href="mailto:customercarestepup.in@gmail.com">customercarestepup.in@gmail.com</a></p></div><img src="{% static 'store/products/asset_59.jpg' %}" alt="StepUp footwear collection"></section>
+<section class="enquiry-section"><p class="eyebrow">SEND US A MESSAGE</p><h2>Enquiry Form</h2><form method="post" class="enquiry-form">{% csrf_token %}<label>Name<input name="name" required></label><div class="form-two"><label>Email<input type="email" name="email" required></label><label>Phone<input name="phone" type="tel"></label></div><label>Subject<input name="subject"></label><label>Message<textarea name="message" rows="5" required></textarea></label><button class="btn" type="submit">Send message →</button></form></section>
+{% endblock %}

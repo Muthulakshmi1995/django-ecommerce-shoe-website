@@ -1,0 +1,10 @@
+{% extends 'store/base.html' %}
+{% block title %}Create account | StepUp.in{% endblock %}
+{% block content %}
+<div class="auth-card"><p class="eyebrow">JOIN THE STEPUP COMMUNITY</p><h1>Create your account</h1><p>Register to keep shopping simple.</p>
+<form method="post" class="auth-form">{% csrf_token %}
+<label>Username<input name="username" required autocomplete="username" value="{{ form.username.value|default:'' }}"></label>{% if form.username.errors %}<p class="form-error">{{ form.username.errors|striptags }}</p>{% endif %}
+<label>Password<input type="password" name="password1" required autocomplete="new-password"></label>{% if form.password1.errors %}<p class="form-error">{{ form.password1.errors|striptags }}</p>{% endif %}
+<label>Confirm password<input type="password" name="password2" required autocomplete="new-password"></label>{% if form.password2.errors %}<p class="form-error">{{ form.password2.errors|striptags }}</p>{% endif %}
+<button class="btn btn-wide" type="submit">Create account</button></form><p class="auth-switch">Already registered? <a href="{% url 'store:login' %}">Log in</a></p></div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'store/base.html' %}
+{% block title %}Payment | StepUp.in{% endblock %}
+{% block content %}
+<div class="payment-card"><div class="success-icon">🔐</div><p class="eyebrow">RAZORPAY TEST MODE</p><h1>Complete your payment</h1><p>Order #{{ order.id }} · Total ₹{{ order.total|floatformat:2 }}</p><p class="muted">This opens Razorpay Checkout using the test keys configured by the site owner. Use Razorpay's test payment details only.</p>
+<button id="rzp-button" class="btn btn-wide">Pay ₹{{ order.total|floatformat:2 }} securely</button>
+<form id="payment-verify" method="post" action="{% url 'store:verify_payment' %}">{% csrf_token %}<input type="hidden" name="razorpay_payment_id"><input type="hidden" name="razorpay_order_id"><input type="hidden" name="razorpay_signature"></form>
+</div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.getElementById('rzp-button').addEventListener('click', function () {
+ const options = {
+  key: "{{ razorpay_key_id|escapejs }}",
+  amount: "{{ amount_paise }}",
+  currency: "INR",
+  name: "StepUp.in",
+  description: "Shoe order #{{ order.id }}",
+  order_id: "{{ razorpay_order_id|escapejs }}",
+  prefill: {name: "{{ customer_name|escapejs }}", email: "{{ email|escapejs }}", contact: "{{ phone|escapejs }}"},
+  theme: {color: "#2F4F4F"},
+  handler: function (response) {
+    const form = document.getElementById('payment-verify');
+    form.elements['razorpay_payment_id'].value = response.razorpay_payment_id;
+    form.elements['razorpay_order_id'].value = response.razorpay_order_id;
+    form.elements['razorpay_signature'].value = response.razorpay_signature;
+    form.submit();
+  }
+ };
+ 
+const checkout = new Razorpay(options);
+
+checkout.on('payment.failed', function (response) {
+    console.error("RAZORPAY PAYMENT FAILED:", response.error);
+    alert(
+        "Payment failed: " +
+        (response.error.description || response.error.reason || "Unknown error") +
+        "\nCheck browser Console for details."
+    );
+});
+
+checkout.open();
+});
+</script>
+{% endblock %}

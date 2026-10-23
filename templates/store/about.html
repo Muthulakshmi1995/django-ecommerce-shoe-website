@@ -1,0 +1,7 @@
+{% extends 'store/base.html' %}{% load static %}
+{% block title %}About StepUp | StepUp.in{% endblock %}
+{% block content %}
+<section class="about-hero"><div class="about-copy"><p class="eyebrow">OUR STORY</p><h1>About StepUp</h1><p>StepUp is a home for people who believe the right pair of shoes can make every day feel special. We bring together comfortable everyday essentials, statement styles and dependable footwear for men, women and kids.</p><h2>Our Mission</h2><p>At StepUp we craft shoes with care for everyone—men, women and kids—with equal attention to detail, letting each shoe speak for itself. Our goal is to make quality, trendy designs and comfortable prices accessible for every step of your journey.</p></div><img src="{% static 'store/products/asset_59.jpg' %}" alt="Colourful shoes"></section>
+<section class="about-values"><article><span>✦</span><h3>Comfort first</h3><p>Styles you can wear through your day.</p></article><article><span>♡</span><h3>Made for everyone</h3><p>Options for men, women and little feet.</p></article><article><span>↗</span><h3>Everyday style</h3><p>Find a pair that feels like you.</p></article></section>
+<section class="overview"><h2>Overview</h2><p>Browse products, compare styles and sizes, add your favourites to the cart and checkout securely. StepUp makes shoe shopping simple from discovery to delivery.</p><a class="btn" href="{% url 'store:shop' %}">Explore the collection</a></section>
+{% endblock %}

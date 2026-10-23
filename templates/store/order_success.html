@@ -1,0 +1,5 @@
+{% extends 'store/base.html' %}
+{% block title %}Order received | StepUp.in{% endblock %}
+{% block content %}
+<div class="payment-card order-success"><div class="success-icon">✓</div><p class="eyebrow">THANK YOU FOR SHOPPING WITH US</p><h1>Order received!</h1><p>Your order number is <strong>#{{ order.id }}</strong>.</p><p>Order status: <span class="status-pill">{{ order.get_status_display }}</span></p><p>Confirmation will be sent to {{ order.email }}.</p><a class="btn" href="{% url 'store:shop' %}">Continue shopping</a></div>
+{% endblock %}

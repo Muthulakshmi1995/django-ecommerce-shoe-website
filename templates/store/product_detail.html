@@ -1,0 +1,24 @@
+{% extends 'store/base.html' %}{% load static %}
+{% block title %}{{ product.name }} | StepUp.in{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'store:shop' %}">← Back to shop</a>
+<div class="detail-layout">
+  <div class="gallery">
+    {% for img in product.image_list %}<button class="gallery-image" type="button" data-image="{% static img %}"><img src="{% static img %}" alt="{{ product.name }} view {{ forloop.counter }}"></button>{% endfor %}
+  </div>
+  <section class="detail-info">
+    <p class="eyebrow">{{ product.brand|default:product.category.name }}</p><h1>{{ product.name }}</h1><p>{{ product.description }}</p>
+    <p class="price detail-price">MRP ₹ {{ product.price|floatformat:0 }} {% if product.mrp and product.mrp > product.price %}<del>₹{{ product.mrp|floatformat:0 }}</del><span class="discount">Special price</span>{% endif %}</p>
+    <div class="stars detail-stars">★★★★★ <small>{{ product.rating }}/5 ({{ product.reviews }} reviews)</small></div>
+    <form method="post" action="{% url 'store:add_to_cart' product.pk %}" class="purchase-form" id="purchase-form">{% csrf_token %}
+      <label>Colour: <strong id="chosen-colour">{{ product.colour_list.0 }}</strong></label><div class="colour-options">{% for colour in product.colour_list %}<label class="colour-option"><input type="radio" name="colour" value="{{ colour }}" {% if forloop.first %}checked{% endif %}><span class="colour-chip {% if forloop.counter == 1 %}chip-black{% elif forloop.counter == 2 %}chip-tan{% else %}chip-red{% endif %}"></span><span>{{ colour }}</span></label>{% endfor %}</div>
+      <hr><label for="size">Shoe Size</label><div class="size-options"><select name="size" id="size">{% for size in product.size_list %}<option value="{{ size }}">{{ size }}</option>{% endfor %}</select></div>
+      <hr><label for="quantity">Quantity</label><div class="quantity-control"><button type="button" data-qty="-1" aria-label="Decrease quantity">−</button><input type="number" id="quantity" name="quantity" min="1" max="20" value="1"><button type="button" data-qty="1" aria-label="Increase quantity">+</button></div>
+      <button class="btn btn-wide" type="submit">Add to Cart</button>
+      <button class="btn btn-wide btn-buy" type="submit" name="next" value="checkout">Buy Now <span>✦</span></button>
+    </form>
+    <div class="delivery-note">✓ Free delivery on this order<br>✓ Easy returns within 7 days<br>✓ Secure checkout</div>
+  </section>
+</div>
+{% if related %}<section class="section-block"><h2>You may also like</h2><div class="product-grid">{% for product in related %}{% include 'store/_product_card.html' %}{% endfor %}</div></section>{% endif %}
+{% endblock %}

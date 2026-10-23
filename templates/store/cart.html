@@ -1,0 +1,16 @@
+{% extends 'store/base.html' %}{% load static %}
+{% block title %}Your Cart | StepUp.in{% endblock %}
+{% block content %}
+<h1 class="center-title">Your Cart</h1>
+{% if items %}
+<div class="arrival-note">🚚 <strong>Free & fast delivery</strong> — Your shoes are almost home!</div>
+<div class="cart-layout"><section class="cart-items">{% for item in items %}<article class="cart-item">
+  <a href="{% url 'store:product_detail' item.product.pk %}"><img src="{% static item.product.image %}" alt="{{ item.product.name }}"></a>
+  <div class="cart-product"><h2>{{ item.product.name }}</h2><p>{{ item.product.brand }} {{ item.product.category.name }}</p><p class="price">MRP ₹ {{ item.product.price|floatformat:0 }}</p><p class="muted">Colour: {{ item.colour }}</p></div>
+  <form method="post" action="{% url 'store:update_cart' item.product.pk %}" class="cart-update">{% csrf_token %}<label>Size<select name="size">{% for size in item.product.size_list %}<option value="{{ size }}" {% if size == item.size %}selected{% endif %}>{{ size }}</option>{% endfor %}</select></label><label>Quantity<select name="quantity">{% for n in "123456789"|make_list %}<option value="{{ n }}" {% if n|add:"0" == item.quantity %}selected{% endif %}>{{ n }}</option>{% endfor %}</select></label><button class="text-button" type="submit">Update</button></form>
+  <form method="post" action="{% url 'store:remove_from_cart' item.product.pk %}">{% csrf_token %}<button class="text-button remove" type="submit">Remove 🗑</button></form>
+  <strong class="line-total">₹ {{ item.subtotal|floatformat:0 }}</strong>
+</article>{% endfor %}</section>
+<aside class="summary-card"><h2>Summary</h2><div><span>Subtotal</span><strong>₹ {{ total|floatformat:0 }}</strong></div><div><span>Delivery</span><strong class="green">Free</strong></div><hr><div class="grand-total"><span>Total</span><strong>₹ {{ total|floatformat:0 }}</strong></div><p class="muted">Taxes included where applicable.</p><a class="btn btn-wide" href="{% url 'store:checkout' %}">🔒 Checkout Securely</a><p class="secure-text">Your details are protected.</p></aside></div>
+{% else %}<div class="empty-state"><div class="empty-icon">🛍</div><h2>Your cart is waiting for a great pair</h2><p>Explore our collection and find your next favourite.</p><a class="btn" href="{% url 'store:shop' %}">Continue shopping</a></div>{% endif %}
+{% endblock %}
