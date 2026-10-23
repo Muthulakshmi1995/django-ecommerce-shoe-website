@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | StepUp Shoes</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            color: #222;
+        }
+
+        nav {
+            background: #263d73;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #263d73;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            margin: 18px 0;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.08);
+        }
+
+        .card a {
+            color: #263d73;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .card a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="{% url 'store:home' %}">StepUp Shoes</a>
+        <a href="{% url 'store:shop' %}">Shop</a>
+        <a href="{% url 'store:cart' %}">Cart</a>
+        <a href="{% url 'store:logout' %}">Log Out</a>
+    </nav>
+
+    <div class="container">
+        <h1>My Account</h1>
+        <p>Welcome to your account!</p>
+
+        <div class="card">
+            <h2>My Orders</h2>
+            <p>View your orders and check their current status.</p>
+            <a href="{% url 'store:my_orders' %}">View My Orders →</a>
+        </div>
+
+        <div class="card">
+            <h2>Track an Order</h2>
+            <p>Use your order number and email to track an order.</p>
+            <a href="{% url 'store:track_order' %}">Track Order →</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            padding: 30px 15px;
+            color: #222;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #263d73;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #263d73;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #182951;
+        }
+
+        .error {
+            background: #ffe8e8;
+            color: #a40000;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .order-details {
+            margin-top: 25px;
+            padding: 18px;
+            background: #f1f7ff;
+            border-radius: 8px;
+        }
+
+        .status {
+            color: #187343;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .steps {
+            margin-top: 20px;
+            padding-left: 20px;
+            line-height: 2;
+        }
+
+        .current {
+            color: #187343;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Track Your Order</h1>
+        <p style="text-align:center;">
+            Enter your order number and email to check delivery status.
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="order_number">Order Number</label>
+            <input
+                type="number"
+                id="order_number"
+                name="order_number"
+                min="1"
+                required
+                placeholder="Enter your order number"
+            >
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="Enter your order email"
+            >
+
+            <button type="submit">Track Order</button>
+        </form>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if order %}
+            <div class="order-details">
+                <h2>Order #{{ order.pk }}</h2>
+
+                <p>
+                    <strong>Customer:</strong>
+                    {{ order.customer_name }}
+                </p>
+
+                <p>
+                    <strong>Order Date:</strong>
+                    {{ order.created_at|date:"d M Y, h:i A" }}
+                </p>
+
+                <p>
+                    <strong>Total:</strong>
+                    ₹{{ order.total }}
+                </p>
+
+                <p>
+                    Current Status:
+                    <span class="status">
+                        {{ order.get_status_display }}
+                    </span>
+                </p>
+
+                <h3>Delivery Progress</h3>
+
+                <ol class="steps">
+                    <li class="{% if order.status == 'pending' or order.status == 'paid' or order.status == 'processing' or order.status == 'packed' or order.status == 'shipped' or order.status == 'in_transit' or order.status == 'out_for_delivery' or order.status == 'delivered' %}current{% endif %}">
+                        Order Placed
+                    </li>
+
+                    <li class="{% if order.status == 'paid' or order.status == 'processing' or order.status == 'packed' or order.status == 'shipped' or order.status == 'in_transit' or order.status == 'out_for_delivery' or order.status == 'delivered' %}current{% endif %}">
+                        Payment Confirmed
+                    </li>
+
+                    <li class="{% if order.status == 'processing' or order.status == 'packed' or order.status == 'shipped' or order.status == 'in_transit' or order.status == 'out_for_delivery' or order.status == 'delivered' %}current{% endif %}">
+                        Processing
+                    </li>
+
+                    <li class="{% if order.status == 'packed' or order.status == 'shipped' or order.status == 'in_transit' or order.status == 'out_for_delivery' or order.status == 'delivered' %}current{% endif %}">
+                        Packed
+                    </li>
+
+                    <li class="{% if order.status == 'shipped' or order.status == 'in_transit' or order.status == 'out_for_delivery' or order.status == 'delivered' %}current{% endif %}">
+                        Shipped
+                    </li>
+
+                    <li class="{% if order.status == 'in_transit' or order.status == 'out_for_delivery' or order.status == 'delivered' %}current{% endif %}">
+                        In Transit
+                    </li>
+
+                    <li class="{% if order.status == 'out_for_delivery' or order.status == 'delivered' %}current{% endif %}">
+                        Out for Delivery
+                    </li>
+
+                    <li class="{% if order.status == 'delivered' %}current{% endif %}">
+                        Delivered
+                    </li>
+                </ol>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

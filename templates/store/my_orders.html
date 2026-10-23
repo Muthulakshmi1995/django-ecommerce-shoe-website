@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | StepUp Shoes</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            color: #222;
+        }
+
+        nav {
+            background: #263d73;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            margin: 18px 0;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .status {
+            color: #187343;
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            background: #263d73;
+            color: white;
+            padding: 11px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .empty {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="{% url 'store:home' %}">StepUp Shoes</a>
+        <a href="{% url 'store:my_account' %}">My Account</a>
+        <a href="{% url 'store:shop' %}">Shop</a>
+        <a href="{% url 'store:logout' %}">Log Out</a>
+    </nav>
+
+    <div class="container">
+        <h1>My Orders</h1>
+        <p>View your order details and delivery status.</p>
+
+        {% for order in orders %}
+            <div class="order-card">
+                <h2>Order #{{ order.id }}</h2>
+
+                <p>
+                    <strong>Order Date:</strong>
+                    {{ order.created_at|date:"d M Y, h:i A" }}
+                </p>
+
+                <p>
+                    <strong>Total Amount:</strong>
+                    ₹{{ order.total }}
+                </p>
+
+                <p>
+                    <strong>Order Status:</strong>
+                    <span class="status">
+                        {{ order.get_status_display }}
+                    </span>
+                </p>
+
+                <a class="button" href="{% url 'store:track_order' %}">
+                    Track Order
+                </a>
+            </div>
+        {% empty %}
+            <div class="empty">
+                <h2>No orders found</h2>
+                <p>Your account does not have any linked orders yet.</p>
+                <a class="button" href="{% url 'store:shop' %}">
+                    Start Shopping
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

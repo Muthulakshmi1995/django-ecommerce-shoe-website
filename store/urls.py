@@ -20,5 +20,8 @@ urlpatterns = [
     path("checkout/", views.checkout, name="checkout"),
     path("payment/verify/", views.verify_payment, name="verify_payment"),
     path("order/success/<int:order_id>/", views.order_success, name="order_success"),
+    path("track-order/", views.track_order, name="track_order"),
+    path("my-account/", views.my_account, name="my_account"),
+path("my-orders/", views.my_orders, name="my_orders"),
         path("<slug:slug>/", views.category, name="category_short"),
 ]

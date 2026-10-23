@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.management import call_command
 from django.db import transaction
 from django.http import JsonResponse
@@ -290,7 +291,31 @@ def verify_payment(request):
 def order_success(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     return render(request, "store/order_success.html", {"order": order})
+def track_order(request):
+    order = None
+    error = ""
 
+    if request.method == "POST":
+        order_number = request.POST.get("order_number", "").strip()
+        email = request.POST.get("email", "").strip()
+
+        if order_number.isdigit():
+            order = Order.objects.filter(
+                pk=int(order_number),
+                email__iexact=email
+            ).first()
+
+        if order is None:
+            error = "Order not found. Please check your order number and email."
+
+    return render(
+        request,
+        "store/track_order.html",
+        {
+            "order": order,
+            "error": error,
+        }
+    )
 
 def customer_login(request):
     if request.user.is_authenticated:
@@ -325,3 +350,19 @@ def customer_logout(request):
     logout(request)
     messages.info(request, "You have been logged out.")
     return redirect("store:home")
+@login_required
+def my_account(request):
+    return render(request, "store/my_account.html")
+
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(
+        user=request.user
+    ).order_by("-created_at")
+
+    return render(
+        request,
+        "store/my_orders.html",
+        {"orders": orders}
+    )
